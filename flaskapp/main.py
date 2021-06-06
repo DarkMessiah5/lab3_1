@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 print('Hello world')
 from flask import Flask
-import numpy as np
 from PIL import Image
 app = Flask(__name__)
 
-
-# decorator dlya vivoda stranitcy po umolchaniu
 
 from flask import render_template, request
 SECRET_KEY = 'secret'
@@ -25,9 +22,9 @@ def data_to():
   return render_template('simple.html', some_str = some_str, some_value = some_value,
                           some_pars = some_pars)
 
-@app.route("/", methods = ("GET", "POST"))
-def hello():
-  return "<html><title>Some title</title><body><h1>Some text<h1></body></html>"
+# @app.route("/", methods = ("GET", "POST"))
+# def hello():
+#   return "<html><title>Some title</title><body><h1>Some text<h1></body></html>"
 
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, SubmitField, TextAreaField
@@ -49,12 +46,12 @@ class NetForm(FlaskForm):
 
 
 UPLOAD_FOLDER = 'static/'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-def GRAPHS(path, root):
+def create_chart(path, root):
     from skimage import io
     import matplotlib
     matplotlib.use('Agg')
@@ -71,7 +68,7 @@ def GRAPHS(path, root):
 
     plt.savefig(root)
 
-@app.route('/load', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         try:
@@ -82,7 +79,8 @@ def upload_file():
                 filename = secure_filename(file.filename)
                 print(filename)
                 file.save(app.config['UPLOAD_FOLDER'] + filename)
-                return render_template('mainPage.html', picture = app.config['UPLOAD_FOLDER'] + filename, a = 1, b = 1)
+                return render_template('mainPage.html', picture = app.config['UPLOAD_FOLDER'] + filename, a = 1, b = 1
+                                       )
         except Exception:
             print("Зашли в except")
             coeff = request.form.get('rescaleInputField')
@@ -95,25 +93,20 @@ def upload_file():
                 height = int(height*coeff)
                 r_picture = r_picture.resize((width, height), Image.ANTIALIAS)
                 r_picture.save(app.config['UPLOAD_FOLDER'] + 'resized' + filename)
-                GRAPHS(app.config['UPLOAD_FOLDER'] + filename, app.config['UPLOAD_FOLDER'] + 'graph' + filename)
-                GRAPHS(app.config['UPLOAD_FOLDER'] + 'resized' + filename, app.config['UPLOAD_FOLDER'] + 'graphresized' + filename)
+                create_chart(app.config['UPLOAD_FOLDER'] + filename, app.config['UPLOAD_FOLDER'] + 'graph' + filename)
+                create_chart(app.config['UPLOAD_FOLDER'] + 'resized' + filename, app.config['UPLOAD_FOLDER'] + 'graphresized' + filename)
                 total = ""
                 total += '<p><img src="' + app.config['UPLOAD_FOLDER'] + 'graph' + filename + '" alt="">'
                 total += '<p><img src="' + app.config['UPLOAD_FOLDER'] + 'graphresized' + filename + '" alt="">'
                 return render_template('mainPage.html', picture = app.config['UPLOAD_FOLDER'] + filename,
                                     picture_new = app.config['UPLOAD_FOLDER'] + 'resized' + filename,
-                                    a = width, b = height) + total
+                                    a = width, b = height,
+                                    chart = app.config['UPLOAD_FOLDER'] + 'graph' + filename,
+                                    chart_resized = app.config['UPLOAD_FOLDER'] + 'graphresized' + filename)
+
             return render_template('mainPage.html', picture = app.config['UPLOAD_FOLDER'] + filename) + "<p>Введено неверное значение!"
 
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    '''
+    return render_template('mainPage.html', picture = "", a = 1, b = 1)
 
 
 # @app.route('/<path:filename>')

@@ -3,12 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Change size App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
-<img src="{{ picture }}">
-<form action = "" method=post enctype="multipart/form-data">
-    <input type ="number" name = rescaleInputField>
-    <input type="submit" name = rescaleButton value="Изменить">
-</form>
-<img src="{{ picture_new }}"  width="{{a}}" height="{{b}}" alt = "">
+<h1>Upload new File</h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    <div class="position-relative">
+        <div class="position-absolute top-0 start-50 translate-middle-x">
+            <div class="badge bg-primary text-wrap" style="width: 10rem;">
+                Change size App
+            </div>
+            <p><img class="border border-4" align="center" src="{{ picture }}">
+            <form class="row g-3" action = "" method=post enctype="multipart/form-data">
+                <div class="row-auto">
+                    <input type ="number" class="form-control" name = rescaleInputField>
+                    <input type="submit" class="btn btn-primary mb-3" name = rescaleButton value="Изменить">
+                </div>
+            </form>
+            <img class="border border-4" align="center" src="{{ picture_new }}"  width="{{a}}" height="{{b}}" alt = "">
+            <img class="border border-4"class="border border-4" align="center" src="{{ chart }}"   alt = "">
+            <img class="border border-4" class="border border-4" align="center" src="{{ chart_resized }}"   alt = "">
+        </div>
+    </div>
 </body>
 </html>
