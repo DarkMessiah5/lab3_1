@@ -5,16 +5,22 @@
     <title>Change size App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
-<h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
+<body style="background-color:#d7e9f5">
     <div class="position-relative">
         <div class="position-absolute top-0 start-50 translate-middle-x">
-            <div class="badge bg-primary text-wrap" style="width: 10rem;">
-                Change size App
+            <div class="badge bg-primary text-wrap" >
+                <h1>Change size App</h1>
             </div>
+            <h1>Upload new File</h1>
+            <form action="" method=post enctype=multipart/form-data>
+                {{ form.csrf_token }}
+                {{ form.text.label }} {{ form.text(size=20) }}
+                {{ form.recaptcha }}
+                <input type="submit" value="Отправить">
+                <p><input type=file name=file>
+                <input type=submit value=Upload>
+            </form>
+
             <p><img class="border border-4" align="center" src="{{ picture }}">
             <form class="row g-3" action = "" method=post enctype="multipart/form-data">
                 <div class="row-auto">
